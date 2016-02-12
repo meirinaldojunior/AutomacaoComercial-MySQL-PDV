@@ -6,6 +6,8 @@
 package pdv.sisac;
 
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import pdv.sisac.formas_pgt.dinheiro;
 
 /**
@@ -14,12 +16,19 @@ import pdv.sisac.formas_pgt.dinheiro;
  */
 public class finalizar_venda extends javax.swing.JFrame {
 
+    
+    //convertando valores para real
+        //ValorTotal
+    BigDecimal bd = new BigDecimal (Float.toString(pdv.total_compra));
+    NumberFormat nf = NumberFormat.getCurrencyInstance();
+    String Volalor_totalConvert = nf.format (bd); // deve mostrar "R$ 12,34"
+    
     /**
      * Creates new form finalizar_venda
      */
     public finalizar_venda() {
         initComponents();
-        valor_label.setText(pdv.total_compra+"");
+        valor_label.setText(Volalor_totalConvert+"");
     }
 
     /**
@@ -35,7 +44,8 @@ public class finalizar_venda extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         valor_label = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        dinheiro_bt = new javax.swing.JButton();
+        cartao_bt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -59,15 +69,27 @@ public class finalizar_venda extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Forma de pagamento");
 
-        jButton1.setText("Dinheiro - F2");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        dinheiro_bt.setText("Dinheiro - F2");
+        dinheiro_bt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                dinheiro_btActionPerformed(evt);
             }
         });
-        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+        dinheiro_bt.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jButton1KeyPressed(evt);
+                dinheiro_btKeyPressed(evt);
+            }
+        });
+
+        cartao_bt.setText("Cartão - F3");
+        cartao_bt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cartao_btActionPerformed(evt);
+            }
+        });
+        cartao_bt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cartao_btKeyPressed(evt);
             }
         });
 
@@ -82,15 +104,15 @@ public class finalizar_venda extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 68, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(175, 175, 175))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(valor_label)
-                                .addGap(64, 64, 64))))))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valor_label)
+                        .addGap(64, 64, 64))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dinheiro_bt, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cartao_bt, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,9 +125,11 @@ public class finalizar_venda extends javax.swing.JFrame {
                     .addComponent(valor_label))
                 .addGap(64, 64, 64)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dinheiro_bt, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                    .addComponent(cartao_bt, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -118,15 +142,28 @@ public class finalizar_venda extends javax.swing.JFrame {
             frame_pgmt_dinheiro.setVisible(true);
         }
     }//GEN-LAST:event_formKeyPressed
-//
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     dinheiro frame_pgmt_dinheiro = new dinheiro();
-            frame_pgmt_dinheiro.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+    private void dinheiro_btActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dinheiro_btActionPerformed
             dinheiro frame_pgmt_dinheiro = new dinheiro();
-            frame_pgmt_dinheiro.setVisible(true);    }//GEN-LAST:event_jButton1KeyPressed
+            frame_pgmt_dinheiro.setVisible(true);
+    }//GEN-LAST:event_dinheiro_btActionPerformed
+
+    private void dinheiro_btKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dinheiro_btKeyPressed
+
+        if(evt.getKeyCode() == KeyEvent.VK_F2){
+            dinheiro frame_pgmt_dinheiro = new dinheiro();
+            frame_pgmt_dinheiro.setVisible(true);
+        }
+
+    }//GEN-LAST:event_dinheiro_btKeyPressed
+
+    private void cartao_btActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cartao_btActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cartao_btActionPerformed
+
+    private void cartao_btKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cartao_btKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cartao_btKeyPressed
 
     /**
      * @param args the command line arguments
@@ -164,7 +201,8 @@ public class finalizar_venda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton cartao_bt;
+    private javax.swing.JButton dinheiro_bt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
