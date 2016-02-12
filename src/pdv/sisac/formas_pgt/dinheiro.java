@@ -6,7 +6,14 @@
 package pdv.sisac.formas_pgt;
 
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
 
+import static pdv.sisac.pdv.*;
 /**
  *
  * @author meirinaldo
@@ -20,6 +27,7 @@ public class dinheiro extends javax.swing.JFrame {
         initComponents();
         total_field.setText(pdv.sisac.pdv.total_compra+"");
         desconto_fild.enable(false);
+        total_field.requestFocus();
     }
 
     /**
@@ -40,6 +48,7 @@ public class dinheiro extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -78,6 +87,11 @@ public class dinheiro extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         jButton1.setForeground(new java.awt.Color(197, 1, 1));
         jButton1.setText("Encerrar Venda");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,8 +145,13 @@ public class dinheiro extends javax.swing.JFrame {
     private void total_fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_total_fieldKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_INSERT){
             desconto_fild.enable(true);
+            desconto_fild.requestFocus();
         }
     }//GEN-LAST:event_total_fieldKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        encerra_venda_dinheiro();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,6 +188,38 @@ public class dinheiro extends javax.swing.JFrame {
         });
     }
 
+    public void encerra_venda_dinheiro(){
+        
+        int opcao = JOptionPane.showConfirmDialog(this, "Confirma o encerramento da venda?");
+        
+        if (opcao == 1){
+            
+            String comando = "UPDATE `compra` SET `subtotal` = '"+pdv.sisac.pdv.total_compra+"', `total` = '"+pdv.sisac.pdv.total_compra+"' , `finalizada` = '"+1+"'  WHERE `compra`.`id` = '"+id_venda_atual+"' ";     
+
+                      try{
+                          Class.forName("com.mysql.jdbc.Driver");
+
+
+                          try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                              usuario, senha); //Conecta-se ao banco de dados
+                              Statement statement = conexao.createStatement()) {
+
+                              ResultSet resultSet = statement.executeQuery(comando);
+
+
+                          }
+
+                          
+                                    }//fim do try     //fim do try     
+                      catch(ClassNotFoundException | SQLException e){     
+
+                          System.err.println(e.getMessage());     
+                      }                
+
+        }
+                
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField desconto_fild;
     private javax.swing.JTextField desconto_fild1;
