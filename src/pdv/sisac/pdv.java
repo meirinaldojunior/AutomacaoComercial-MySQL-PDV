@@ -41,9 +41,10 @@ public class pdv extends javax.swing.JFrame {
     String usuario;
     String senha;
     String base;
+    public int total_itensQuanti;
     public  int id_venda_atual;
     Boolean venda_iniciada = false;
-    public float total_compra = 0;
+    public static float total_compra = 0;
                         
   
     public pdv() {
@@ -99,7 +100,8 @@ public class pdv extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
+        total_itensLabel = new javax.swing.JLabel();
+        total_itens = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -204,22 +206,32 @@ public class pdv extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(156, 34, 34));
 
-        jLabel9.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel9.setText("Total Itens:");
+        total_itensLabel.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        total_itensLabel.setForeground(new java.awt.Color(254, 254, 254));
+        total_itensLabel.setText("Total Itens:");
+
+        total_itens.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        total_itens.setForeground(new java.awt.Color(254, 254, 254));
+        total_itens.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel9)
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addComponent(total_itensLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(total_itens, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(total_itens, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(total_itensLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
 
         jPanel5.setBackground(new java.awt.Color(1, 5, 119));
@@ -313,6 +325,8 @@ public class pdv extends javax.swing.JFrame {
 
         preco_total_vendaLabel.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         preco_total_vendaLabel.setForeground(new java.awt.Color(254, 254, 254));
+        preco_total_vendaLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        preco_total_vendaLabel.setToolTipText("");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -384,7 +398,7 @@ public class pdv extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -472,7 +486,6 @@ public class pdv extends javax.swing.JFrame {
                   Connection conn = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
                                                                               usuario, senha); //Conecta-se ao banco de dados
                   java.sql.Statement st = conn.createStatement();
-                  JOptionPane.showMessageDialog(this, produto_field.getText()+"");
                   st.executeUpdate("INSERT INTO compra_itens (id,id_pedido,id_produto,quantidade_itens) VALUES ("
                           + "0"+ ",'"
                           +  id_venda_atual + "','"
@@ -486,7 +499,9 @@ public class pdv extends javax.swing.JFrame {
                               produto_field.requestFocus();
                               produto_field.selectAll();
                               
+                              total_itensQuanti = total_itensQuanti + Integer.parseInt(quantidade_field.getText()); 
                               total_compra = total_compra + (Integer.parseInt(quantidade_field.getText())*preco_venda);
+                              //resetando preços e quantidades 
                               quantidade_field.setText("1");
                               preco_total_vendaLabel.setText(total_compra+"");
                               
@@ -709,7 +724,6 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -725,5 +739,7 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JTextField produto_field;
     private javax.swing.JTextField quantidade_field;
     private javax.swing.JLabel status_venda;
+    private javax.swing.JLabel total_itens;
+    private javax.swing.JLabel total_itensLabel;
     // End of variables declaration//GEN-END:variables
 }
