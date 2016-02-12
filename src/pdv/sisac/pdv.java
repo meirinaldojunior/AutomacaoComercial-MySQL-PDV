@@ -485,7 +485,7 @@ public class pdv extends javax.swing.JFrame {
                   st.executeUpdate("INSERT INTO compra_itens (id,id_pedido,id_produto,quantidade_itens) VALUES ("
                           + "0"+ ",'"
                           +  id_venda_atual + "','"
-                          + Integer.parseInt(produto_field.getText()) + "','"                          
+                          + Integer.parseInt(produto_field.getText().replaceAll(" ","")) + "','"                          
                           + Integer.parseInt(quantidade_field.getText()) + "')");
 
                   //depois de incluido na base mostra para o usuário e faz os tratamentos:
