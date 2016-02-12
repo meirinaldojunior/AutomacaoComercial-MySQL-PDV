@@ -5,6 +5,7 @@
  */
 package pdv.sisac;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.text.html.parser.Parser;
 
 
 
@@ -39,12 +41,16 @@ public class pdv extends javax.swing.JFrame {
     String usuario;
     String senha;
     String base;
+    public  int id_venda_atual;
+    Boolean venda_iniciada = false;
+    public float total_compra = 0;
                         
   
     public pdv() {
         initComponents();
         
-          //iniciando configurações salvas do banco
+        
+        //iniciando configurações salvas do banco
          String[] arquivo = new String[5];
 			try{			
                                 FileReader entrada = new FileReader("con.sist");
@@ -56,9 +62,11 @@ public class pdv extends javax.swing.JFrame {
 					c++;					
 				}
 			}catch(IOException e){
-                            JOptionPane.showMessageDialog(this, "Erro ao buscar arquivo de "
+                            /*      JOptionPane.showMessageDialog(this, "Erro ao buscar arquivo de "
                             + "configurações da Base de Dados, para o sistema funcionar DEVE ter as configurações feitas.");
-			}
+                            */
+                        
+                        }
 
                    
                         caminho = arquivo[0];
@@ -104,8 +112,11 @@ public class pdv extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        preco_total_vendaLabel = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        status_venda = new javax.swing.JLabel();
+        id_venda_Labe = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,7 +132,6 @@ public class pdv extends javax.swing.JFrame {
         precoItem_labe.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         precoItem_labe.setForeground(new java.awt.Color(254, 254, 254));
         precoItem_labe.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        precoItem_labe.setText("jTextField1");
 
         quantidade_field.setBackground(new java.awt.Color(1, 1, 1));
         quantidade_field.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
@@ -138,7 +148,7 @@ public class pdv extends javax.swing.JFrame {
         produto_field.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         produto_field.setForeground(new java.awt.Color(254, 254, 254));
         produto_field.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        produto_field.setText("jTextField1");
+        produto_field.setText("VENDA NÃO INICIADA");
         produto_field.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 produto_fieldKeyPressed(evt);
@@ -301,6 +311,9 @@ public class pdv extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(254, 254, 254));
         jLabel11.setText("Total Compra:");
 
+        preco_total_vendaLabel.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        preco_total_vendaLabel.setForeground(new java.awt.Color(254, 254, 254));
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -308,16 +321,25 @@ public class pdv extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preco_total_vendaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(preco_total_vendaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jToolBar1.setRollover(true);
+
+        status_venda.setText("Status: ");
+        jToolBar1.add(status_venda);
+
+        id_venda_Labe.setText("jLabel12");
+        jToolBar1.add(id_venda_Labe);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -393,7 +415,9 @@ public class pdv extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void quantidade_fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantidade_fieldKeyPressed
-    //Apertar insert entrar na quatidade
+            
+
+    //Apertar enter voltar para produto
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
              produto_field.requestFocus();
              produto_field.selectAll();
@@ -403,56 +427,82 @@ public class pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_quantidade_fieldKeyPressed
 
     private void produto_fieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_produto_fieldKeyPressed
-    //Entrar no metodo das teclas de atalho    
-          if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-              
-                //Atributos de comando     
-                String comando = "SELECT * FROM produtos WHERE id='"+Integer.parseInt(produto_field.getText())+"'";     
-
-                try{
-                    Class.forName("com.mysql.jdbc.Driver");
-
-
-                    try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
-                                                                        usuario, senha); //Conecta-se ao banco de dados
-                        Statement statement = conexao.createStatement()) {
-                        
-                        ResultSet resultSet = statement.executeQuery(comando);
-                        
-                     
-                        while (resultSet.next()) {
-                            Produto = resultSet.getString("produto");
-                            preco_venda = resultSet.getFloat("preco_venda");
-                            
-                            
-                        }
-                        
-                        
-                        
-                        String PrecoVendaString = "R$ "+preco_venda;
-                        precoItem_labe.setText(PrecoVendaString);
-                        produto_field.setText(Produto);
-                        produto_field.requestFocus();
-                        produto_field.selectAll();
-                    
-                        //produto não encontrado na base
-                        if (resultSet.first() == false){
-                            JOptionPane.showMessageDialog(this, "Produto não cadastrado!");
-                            precoItem_labe.setText("");
-                            produto_field.setText("");
-                        }
-                        
-                    }
-
-                              }//fim do try     //fim do try     
-                catch(ClassNotFoundException | SQLException e){     
-
-                    System.err.println(e.getMessage());     
-                }                
-                }
+    //Entrar no metodo das teclas de atalho  
         
-          teclas_atalho(evt);
-      
+          if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+                       //Procurar produto!!!
+                      //Atributos de comando     
+                      String comando = "SELECT * FROM produtos WHERE id='"+Integer.parseInt(produto_field.getText().replaceAll(" ",""))+"'";     
+
+                      try{
+                          Class.forName("com.mysql.jdbc.Driver");
+
+
+                          try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                              usuario, senha); //Conecta-se ao banco de dados
+                              Statement statement = conexao.createStatement()) {
+
+                              ResultSet resultSet = statement.executeQuery(comando);
+
+
+                              while (resultSet.next()) {
+                                  Produto = resultSet.getString("produto");
+                                  preco_venda = resultSet.getFloat("preco_venda");
+                              }
+                             
+
+                              //produto não encontrado na base
+                              if (resultSet.first() == false){
+                                  JOptionPane.showMessageDialog(this, "Produto não cadastrado!");
+                                  precoItem_labe.setText("");
+                                  produto_field.setText("");
+                              }
+                          }
+
+                                    }//fim do try     //fim do try     
+                      catch(ClassNotFoundException | SQLException e){     
+
+                          System.err.println(e.getMessage());     
+                      }                
+                //Incluindo produto na venda!
+                      
+                            try {
+                  Class.forName("com.mysql.jdbc.Driver");
+
+                  Connection conn = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                              usuario, senha); //Conecta-se ao banco de dados
+                  java.sql.Statement st = conn.createStatement();
+                  JOptionPane.showMessageDialog(this, produto_field.getText()+"");
+                  st.executeUpdate("INSERT INTO compra_itens (id,id_pedido,id_produto,quantidade_itens) VALUES ("
+                          + "0"+ ",'"
+                          +  id_venda_atual + "','"
+                          + Integer.parseInt(produto_field.getText()) + "','"                          
+                          + Integer.parseInt(quantidade_field.getText()) + "')");
+
+                  //depois de incluido na base mostra para o usuário e faz os tratamentos:
+                              String PrecoVendaString = "R$ "+preco_venda;
+                              precoItem_labe.setText(PrecoVendaString);
+                              produto_field.setText(Produto);
+                              produto_field.requestFocus();
+                              produto_field.selectAll();
+                              
+                              total_compra = total_compra + (Integer.parseInt(quantidade_field.getText())*preco_venda);
+                              quantidade_field.setText("1");
+                              preco_total_vendaLabel.setText(total_compra+"");
+                              
+                  
+              } catch (SQLException | ClassNotFoundException e) {
+                  JOptionPane.showMessageDialog(rootPane, e);
+              }//Fim try
+                            
+                            
+          
+          
+          }else{
+                teclas_atalho(evt);
+                }
+          
+          
     }//GEN-LAST:event_produto_fieldKeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
@@ -462,6 +512,43 @@ public class pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1KeyPressed
 
     public void teclas_atalho(java.awt.event.KeyEvent evt){
+           //Aperta espaço para iniciar venda!!!
+            //inicia venda!
+         if (evt.getKeyCode() == KeyEvent.VK_SPACE){  
+             if(venda_iniciada == false){
+                    if(verificar_VendaAnteriorFinalizada() == true){
+
+                        venda_iniciada = true;
+                        status_venda.setText("Venda Iniciada!");
+                        
+
+                          try {
+                        //Registra JDBC driver
+                        Class.forName("com.mysql.jdbc.Driver");
+
+                        //Abrindo a conexão: ATENÇÃO OS DOIS PARÂMETROS VAZIOS("") SÃO USUÁRIO E SENHA, RESPECTIVAMENTE.
+                        Connection conn = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                                    usuario, senha); //Conecta-se ao banco de dados
+
+                        //Executa a query de inserção
+                        java.sql.Statement st = conn.createStatement();
+                        st.executeUpdate("INSERT INTO compra (id,cliente) VALUES ("
+                                + "0,'"
+                                +"Cliente Balcão" + "')");
+                        
+                        
+                        
+                    } catch (SQLException | ClassNotFoundException e) {
+                        JOptionPane.showMessageDialog(rootPane, "Problema ao iniciar venda! "+e);
+                    }//Fim try
+                      }
+                    //pega ID da compra atual
+                    id_venda_atual = select_banco("SELECT id FROM compra ORDER BY id DESC LIMIT 1");
+                    id_venda_Labe.setText(" | ID da venda: "+id_venda_atual);
+             }
+        } 
+ 
+        
         //Apertar insert entrar na quatidade
         if (evt.getKeyCode() == KeyEvent.VK_INSERT) { 
              quantidade_field.requestFocus();
@@ -538,9 +625,80 @@ public class pdv extends javax.swing.JFrame {
         });
     }
 
-    
+   public Boolean verificar_VendaAnteriorFinalizada(){
+        Boolean finalizada = false;
+        
+        //Verificar se venda anterior foi fechada!!!!
+                //Atributos de comando     
+                String comando = "SELECT `finalizada` FROM compra ORDER BY id DESC LIMIT 1";     
+
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+
+
+                    try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                        usuario, senha); //Conecta-se ao banco de dados
+                        Statement statement = conexao.createStatement()) {
+                        
+                        ResultSet resultSet = statement.executeQuery(comando);
+                        
+                     
+                        while (resultSet.next()) {
+                           int eh_finalizada = resultSet.getInt("finalizada");
+                           
+                           if (eh_finalizada == 1){
+                               finalizada = true;
+                           } else{
+                               produto_field.setText("Venda Anterior não finalizada!!!");
+                               produto_field.setForeground(Color.yellow);
+
+                           }
+                            
+                        }
+                        
+                    }
+
+                              }//fim do try     //fim do try     
+                catch(ClassNotFoundException | SQLException e){     
+                    System.err.println(e.getMessage());     
+                }                
+                
+        
+        
+        return finalizada;
+    }
+            
+   
+   public int select_banco(String sql){
+       int id = 0;
+                try{
+                    Class.forName("com.mysql.jdbc.Driver");
+
+
+                    try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                        usuario, senha); //Conecta-se ao banco de dados
+                        Statement statement = conexao.createStatement()) {
+                        
+                        ResultSet resultSet = statement.executeQuery(sql);
+                        
+                     
+                        while (resultSet.next()) {
+                           id = resultSet.getInt("id");                           
+                        }
+                        
+                    }
+
+                              }//fim do try     //fim do try     
+                catch(ClassNotFoundException | SQLException e){     
+                    System.err.println(e.getMessage());     
+                }                
+          
+       
+       return id;
+   }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel id_venda_Labe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -563,7 +721,9 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTextField precoItem_labe;
+    private javax.swing.JLabel preco_total_vendaLabel;
     private javax.swing.JTextField produto_field;
     private javax.swing.JTextField quantidade_field;
+    private javax.swing.JLabel status_venda;
     // End of variables declaration//GEN-END:variables
 }
