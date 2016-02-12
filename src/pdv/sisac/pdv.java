@@ -31,13 +31,14 @@ public class pdv extends javax.swing.JFrame {
     String Produto;
     float preco_venda;
     
-    String caminho;
-    String porta;
-    String usuario;
-    String senha;
-    String base;
+    public static String caminho;
+    public static String porta;
+    public static String usuario;
+    public static String senha;
+    public static String base;
+    
     public int total_itensQuanti;
-    public  int id_venda_atual;
+    public static int id_venda_atual;
     Boolean venda_iniciada = false;
     public static float total_compra = 0;
                         

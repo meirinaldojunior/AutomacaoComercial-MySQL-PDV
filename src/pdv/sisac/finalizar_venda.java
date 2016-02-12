@@ -118,7 +118,7 @@ public class finalizar_venda extends javax.swing.JFrame {
             frame_pgmt_dinheiro.setVisible(true);
         }
     }//GEN-LAST:event_formKeyPressed
-
+//
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
      dinheiro frame_pgmt_dinheiro = new dinheiro();
             frame_pgmt_dinheiro.setVisible(true);
