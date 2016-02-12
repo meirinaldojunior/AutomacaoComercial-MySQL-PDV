@@ -43,7 +43,8 @@ public class base_de_dados extends javax.swing.JFrame {
         
         initComponents();
         
-
+        pdv frame_pdv = new pdv();
+        frame_pdv.setVisible(true);
         //iniciando configurações salvas do banco
          String[] arquivo = new String[5];
 			try{			
@@ -56,8 +57,9 @@ public class base_de_dados extends javax.swing.JFrame {
 					c++;					
 				}
 			}catch(IOException e){
-                            /*JOptionPane.showMessageDialog(this, "Erro ao buscar arquivo de "
-                            + "configurações da Base de Dados");*/
+                            frame_pdv.dispose();
+                            JOptionPane.showMessageDialog(this, "Erro ao buscar arquivo de "
+                            + "configurações da Base de Dados, para o sistema funcionar DEVE ter as configurações feitas.");
 			}
 
                         //seta campos configurações com os dados da conexão

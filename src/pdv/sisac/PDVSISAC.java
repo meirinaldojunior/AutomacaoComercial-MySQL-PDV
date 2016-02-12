@@ -14,7 +14,7 @@ public class PDVSISAC {
     public static void main(String[] args) {
         //abrindo tela do PDV
         
-        pdv frame_pdv = new pdv();
+        base_de_dados frame_pdv = new base_de_dados();
         frame_pdv.setVisible(true);
     }
     
