@@ -5,6 +5,9 @@
  */
 package pdv.sisac;
 
+import java.awt.event.KeyEvent;
+import pdv.sisac.formas_pgt.dinheiro;
+
 /**
  *
  * @author meirinaldo
@@ -36,6 +39,11 @@ public class finalizar_venda extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -52,6 +60,16 @@ public class finalizar_venda extends javax.swing.JFrame {
         jLabel3.setText("Forma de pagamento");
 
         jButton1.setText("Dinheiro - F2");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,6 +111,22 @@ public class finalizar_venda extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_F2){
+            dinheiro frame_pgmt_dinheiro = new dinheiro();
+            frame_pgmt_dinheiro.setVisible(true);
+        }
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+     dinheiro frame_pgmt_dinheiro = new dinheiro();
+            frame_pgmt_dinheiro.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+            dinheiro frame_pgmt_dinheiro = new dinheiro();
+            frame_pgmt_dinheiro.setVisible(true);    }//GEN-LAST:event_jButton1KeyPressed
 
     /**
      * @param args the command line arguments
