@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.html.parser.Parser;
 
 /**
@@ -46,11 +48,33 @@ public class pdv extends javax.swing.JFrame {
     public static Boolean venda_iniciada = false;
     public static float total_compra = 0;
                         
+    
+    static public JTable tabela;
+    static public DefaultTableModel modelo =new DefaultTableModel();
   
+      private void criar_jtable(){
+        
+        tabela = new JTable(modelo);
+        modelo.addColumn("ID");
+        modelo.addColumn("Produto");
+        modelo.addColumn("Preço");
+        modelo.addColumn("quantidade");
+        
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(3).setPreferredWidth(20);
+        
+    }
+    
+    
     public pdv() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         produto_field.setEditable(false);
+        
+        criar_jtable();
+        jScrollPane2.setViewportView(tabela);
         //iniciando configurações salvas do banco
          String[] arquivo = new String[5];
 			try{			
@@ -102,8 +126,6 @@ public class pdv extends javax.swing.JFrame {
         total_itensLabel = new javax.swing.JLabel();
         total_itens = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -119,6 +141,7 @@ public class pdv extends javax.swing.JFrame {
         jToolBar1 = new javax.swing.JToolBar();
         status_venda = new javax.swing.JLabel();
         id_venda_Labe = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -184,7 +207,7 @@ public class pdv extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(produto_field)
+                    .addComponent(produto_field, javax.swing.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -246,19 +269,6 @@ public class pdv extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
 
         jPanel6.setBackground(new java.awt.Color(97, 97, 97));
 
@@ -391,8 +401,8 @@ public class pdv extends javax.swing.JFrame {
                             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 702, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -411,8 +421,8 @@ public class pdv extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(48, 48, 48))
         );
@@ -466,6 +476,8 @@ public class pdv extends javax.swing.JFrame {
 
 
                               while (resultSet.next()) {
+                                  
+                                  int id_Produto = resultSet.getInt("id");
                                   Produto = resultSet.getString("produto");
                                   preco_venda = resultSet.getFloat("preco_venda");
                               }
@@ -497,6 +509,10 @@ public class pdv extends javax.swing.JFrame {
                           +  id_venda_atual + "','"
                           + Integer.parseInt(produto_field.getText().replaceAll(" ","")) + "','"                          
                           + Integer.parseInt(quantidade_field.getText()) + "')");
+                  
+                  //Inclui na lista de vendas da tela
+                  
+                   modelo.addRow(new Object[] {produto_field.getText().replaceAll(" ",""), Produto,formatoMoeda.format(preco_venda),quantidade_field.getText()} );
 
                   //depois de incluido na base mostra para o usuário e faz os tratamentos:
                               String PrecoVendaString = "R$ "+preco_venda;
@@ -748,8 +764,7 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar jToolBar1;
     public static javax.swing.JTextField precoItem_labe;
     public static javax.swing.JLabel preco_total_vendaLabel;
