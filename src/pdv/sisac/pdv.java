@@ -49,7 +49,7 @@ public class pdv extends javax.swing.JFrame {
   
     public pdv() {
         initComponents();
-        
+        this.setExtendedState(MAXIMIZED_BOTH);
         produto_field.setEditable(false);
         //iniciando configurações salvas do banco
          String[] arquivo = new String[5];
@@ -111,6 +111,7 @@ public class pdv extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         preco_total_vendaLabel = new javax.swing.JLabel();
@@ -279,6 +280,9 @@ public class pdv extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(254, 254, 254));
         jLabel10.setText("HOME - Configurações");
 
+        jLabel9.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel9.setText("END - Finaliza Venda");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -287,16 +291,17 @@ public class pdv extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel7)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel9))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
-                            .addComponent(jLabel8))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)))
+                    .addComponent(jLabel6))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,16 +309,18 @@ public class pdv extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addContainerGap())
         );
 
         jPanel7.setBackground(new java.awt.Color(156, 34, 34));
@@ -351,7 +358,7 @@ public class pdv extends javax.swing.JFrame {
         status_venda.setText("Status: ");
         jToolBar1.add(status_venda);
 
-        id_venda_Labe.setText("jLabel12");
+        id_venda_Labe.setText("ID da Venda Atual");
         jToolBar1.add(id_venda_Labe);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -393,7 +400,7 @@ public class pdv extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -419,7 +426,7 @@ public class pdv extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -577,8 +584,12 @@ public class pdv extends javax.swing.JFrame {
         }
         //Apertar end finalizar venda
         if(evt.getKeyCode() == KeyEvent.VK_END){
+            if(venda_iniciada=true && total_itensQuanti != 0){
             finalizar_venda frame_FinalizarVenda = new finalizar_venda();
             frame_FinalizarVenda.setVisible(true);
+            } else{
+                JOptionPane.showMessageDialog(this, "Você precisa iniciar uma venda e ter produtos adicionado!!!");
+            }
         }
         //Apertar HOME entrar nas configurações do PDV
         if(evt.getKeyCode() == KeyEvent.VK_HOME){
@@ -596,7 +607,7 @@ public class pdv extends javax.swing.JFrame {
         } 
         //Apertar f3 consulta item
         if(evt.getKeyCode() == KeyEvent.VK_F3){
-            consultar_item frame_ConsultarItem = new consultar_item();
+            pesquisar_produto frame_ConsultarItem = new pesquisar_produto();
             frame_ConsultarItem.setVisible(true);
         }
         //Apertar f4 ultimas vendas
@@ -718,7 +729,7 @@ public class pdv extends javax.swing.JFrame {
    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel id_venda_Labe;
+    public static javax.swing.JLabel id_venda_Labe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -729,6 +740,7 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -743,7 +755,7 @@ public class pdv extends javax.swing.JFrame {
     public static javax.swing.JLabel preco_total_vendaLabel;
     public static javax.swing.JTextField produto_field;
     private javax.swing.JTextField quantidade_field;
-    private javax.swing.JLabel status_venda;
+    public static javax.swing.JLabel status_venda;
     public static javax.swing.JLabel total_itens;
     private javax.swing.JLabel total_itensLabel;
     // End of variables declaration//GEN-END:variables
