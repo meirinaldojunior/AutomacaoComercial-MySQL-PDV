@@ -209,7 +209,7 @@ public class dinheiro extends javax.swing.JFrame {
             
             dinheiro_pago.setText(formatoMoeda.format(Float.parseFloat(dinheiro_pago.getText())));
             troco_field.setText(formatoMoeda.format(troco_calcula));
-            bt_finalizarVenda.setFocusable(true);
+            bt_finalizarVenda.requestFocus();
             } else{
                 JOptionPane.showMessageDialog(this, "Desculpe você deve inserir um valor maior que o totalx");
             }
@@ -285,7 +285,7 @@ public class dinheiro extends javax.swing.JFrame {
                     + total_compra + "',finalizada='"
                     + 1 + "',tipo_pagamento='"
                     + 1 + "',din_recebido='"
-                    + 12.99 + "',troco='"
+                    + valor_dinheiro_rece + "',troco='"
                     + troco_calcula
                     + "' WHERE id='" + id_venda_atual + "'");
             JOptionPane.showMessageDialog(rootPane, "VENDA FINALIZADA!!!");
@@ -296,6 +296,9 @@ public class dinheiro extends javax.swing.JFrame {
             pdv.precoItem_labe.setText("");
             pdv.total_itens.setText("");
             pdv.total_itensQuanti = 0;
+            pdv.status_venda.setText("Status: Venda não Iniciada...!");
+            pdv.id_venda_Labe.setText("");
+            total_compra = 0;
                        
             dispose();
             
