@@ -29,6 +29,7 @@ public class pdv extends javax.swing.JFrame {
      * Creates new form pdv
      */
     NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance();
+    static public Boolean finalizada = false;
      
 
     String Produto;
@@ -40,9 +41,9 @@ public class pdv extends javax.swing.JFrame {
     public static String senha;
     public static String base;
     
-    public int total_itensQuanti;
+    public static int total_itensQuanti;
     public static int id_venda_atual;
-    Boolean venda_iniciada = false;
+    public static Boolean venda_iniciada = false;
     public static float total_compra = 0;
                         
   
@@ -145,7 +146,7 @@ public class pdv extends javax.swing.JFrame {
         });
 
         produto_field.setBackground(new java.awt.Color(1, 1, 1));
-        produto_field.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        produto_field.setFont(new java.awt.Font("Ubuntu", 1, 36)); // NOI18N
         produto_field.setForeground(new java.awt.Color(254, 254, 254));
         produto_field.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         produto_field.setText("VENDA NÃO INICIADA");
@@ -499,6 +500,8 @@ public class pdv extends javax.swing.JFrame {
                               
                               total_itensQuanti = total_itensQuanti + Integer.parseInt(quantidade_field.getText()); 
                               total_compra = total_compra + (Integer.parseInt(quantidade_field.getText())*preco_venda);
+                              total_itens.setText(total_itensQuanti+"");
+                              
                               //resetando preços e quantidades 
                               quantidade_field.setText("1");
                               preco_total_vendaLabel.setText(formatoMoeda.format(total_compra));
@@ -529,6 +532,7 @@ public class pdv extends javax.swing.JFrame {
             //inicia venda!
          if (evt.getKeyCode() == KeyEvent.VK_SPACE){  
              if(venda_iniciada == false){
+                 
                     if(verificar_VendaAnteriorFinalizada() == true){
 
                         venda_iniciada = true;
@@ -643,7 +647,6 @@ public class pdv extends javax.swing.JFrame {
     }
 
    public Boolean verificar_VendaAnteriorFinalizada(){
-        Boolean finalizada = false;
         
         //Verificar se venda anterior foi fechada!!!!
                 //Atributos de comando     
@@ -736,12 +739,12 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JTextField precoItem_labe;
-    private javax.swing.JLabel preco_total_vendaLabel;
-    private javax.swing.JTextField produto_field;
+    public static javax.swing.JTextField precoItem_labe;
+    public static javax.swing.JLabel preco_total_vendaLabel;
+    public static javax.swing.JTextField produto_field;
     private javax.swing.JTextField quantidade_field;
     private javax.swing.JLabel status_venda;
-    private javax.swing.JLabel total_itens;
+    public static javax.swing.JLabel total_itens;
     private javax.swing.JLabel total_itensLabel;
     // End of variables declaration//GEN-END:variables
 }

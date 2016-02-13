@@ -29,6 +29,8 @@ public class finalizar_venda extends javax.swing.JFrame {
     public finalizar_venda() {
         initComponents();
         valor_label.setText(Volalor_totalConvert+"");
+        
+      
     }
 
     /**
@@ -146,11 +148,13 @@ public class finalizar_venda extends javax.swing.JFrame {
     private void dinheiro_btActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dinheiro_btActionPerformed
             dinheiro frame_pgmt_dinheiro = new dinheiro();
             frame_pgmt_dinheiro.setVisible(true);
+            dispose();
     }//GEN-LAST:event_dinheiro_btActionPerformed
 
     private void dinheiro_btKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dinheiro_btKeyPressed
 
         if(evt.getKeyCode() == KeyEvent.VK_F2){
+            dispose();
             dinheiro frame_pgmt_dinheiro = new dinheiro();
             frame_pgmt_dinheiro.setVisible(true);
         }
@@ -196,6 +200,8 @@ public class finalizar_venda extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new finalizar_venda().setVisible(true);
+                
+              
             }
         });
     }
