@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Currency;
 import javax.swing.JOptionPane;
+import pdv.sisac.pdv;
 
 import static pdv.sisac.pdv.*;
 /**
@@ -29,13 +30,13 @@ public class dinheiro extends javax.swing.JFrame {
            
     //iniciando variveis dos calculos
     
-    float valor_totalVenda = pdv.sisac.pdv.total_compra;
+    float valor_totalVenda = pdv.total_compra;
   //  float valor_recebido = Float.parseFloat(base) ;
     float troco_calcula;
     float valor_dinheiro_rece;
     //convertando valores para real
         //ValorTotal
-    BigDecimal bd = new BigDecimal (Float.toString(pdv.sisac.pdv.total_compra));
+    BigDecimal bd = new BigDecimal (Float.toString(pdv.total_compra));
     NumberFormat nf = NumberFormat.getCurrencyInstance();
     String Volalor_totalConvert = nf.format (bd); // deve mostrar "R$ 12,34"
     
@@ -235,12 +236,8 @@ public class dinheiro extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String args[] ) {
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -291,7 +288,17 @@ public class dinheiro extends javax.swing.JFrame {
                     + 12.99 + "',troco='"
                     + troco_calcula
                     + "' WHERE id='" + id_venda_atual + "'");
-            JOptionPane.showMessageDialog(rootPane, "Aluno atualizado");
+            JOptionPane.showMessageDialog(rootPane, "VENDA FINALIZADA!!!");
+           
+            pdv.venda_iniciada = false;
+            pdv.produto_field.setText("CAIXA ABERTO!");
+            pdv.preco_total_vendaLabel.setText("");
+            pdv.precoItem_labe.setText("");
+            pdv.total_itens.setText("");
+            pdv.total_itensQuanti = 0;
+                       
+            dispose();
+            
         } catch (SQLException | ClassNotFoundException e) {
             JOptionPane.showMessageDialog(rootPane, e);
         }//Fim try
