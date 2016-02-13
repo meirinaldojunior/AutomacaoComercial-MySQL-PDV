@@ -37,6 +37,7 @@ public class pdv extends javax.swing.JFrame {
     String Produto;
     float preco_venda;
     
+    int id_Produto_ASerExluirdo;
     public static String caminho;
     public static String porta;
     public static String usuario;
@@ -48,6 +49,7 @@ public class pdv extends javax.swing.JFrame {
     public static Boolean venda_iniciada = false;
     public static float total_compra = 0;
                         
+    public static int Coidgo_ultimaVenda;
     
     static public JTable tabela;
     static public DefaultTableModel modelo =new DefaultTableModel();
@@ -55,7 +57,8 @@ public class pdv extends javax.swing.JFrame {
       private void criar_jtable(){
         
         tabela = new JTable(modelo);
-        modelo.addColumn("ID");
+
+        modelo.addColumn("Cod. Barras");
         modelo.addColumn("Produto");
         modelo.addColumn("Preço");
         modelo.addColumn("quantidade");
@@ -65,7 +68,7 @@ public class pdv extends javax.swing.JFrame {
         tabela.getColumnModel().getColumn(2).setPreferredWidth(50);
         tabela.getColumnModel().getColumn(3).setPreferredWidth(20);
         
-    }
+   }
     
     
     public pdv() {
@@ -134,6 +137,7 @@ public class pdv extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         preco_total_vendaLabel = new javax.swing.JLabel();
@@ -263,7 +267,7 @@ public class pdv extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,7 +295,10 @@ public class pdv extends javax.swing.JFrame {
         jLabel10.setText("HOME - Configurações");
 
         jLabel9.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel9.setText("END - Finaliza Venda");
+        jLabel9.setText("ESPAÇO - Inicia venda");
+
+        jLabel12.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel12.setText("F5 - Exluir último produto");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -300,17 +307,20 @@ public class pdv extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
                             .addComponent(jLabel4)
                             .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
+                        .addGap(24, 24, 24)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel7)))
-                    .addComponent(jLabel6))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -319,18 +329,22 @@ public class pdv extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel8))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addContainerGap())
+                    .addComponent(jLabel12))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel7.setBackground(new java.awt.Color(156, 34, 34));
@@ -385,6 +399,12 @@ public class pdv extends javax.swing.JFrame {
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
+        jScrollPane2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jScrollPane2KeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -416,7 +436,7 @@ public class pdv extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -550,6 +570,11 @@ public class pdv extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_jPanel1KeyPressed
 
+    private void jScrollPane2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPane2KeyPressed
+        teclas_atalho(evt);
+
+    }//GEN-LAST:event_jScrollPane2KeyPressed
+
     public void teclas_atalho(java.awt.event.KeyEvent evt){
            //Aperta espaço para iniciar venda!!!
             //inicia venda!
@@ -616,11 +641,61 @@ public class pdv extends javax.swing.JFrame {
         //Apertar enter ir para produti
       
         
-        //Apertar f2 abrir frame exluir item
-        if(evt.getKeyCode() == KeyEvent.VK_F2){
-            excluir_item frame_exluirItem = new excluir_item();
-            frame_exluirItem.setVisible(true);
+        //Apertar delete exlcuir
+        if(evt.getKeyCode() == KeyEvent.VK_F5){
+          
+                int opcao = JOptionPane.showConfirmDialog(this, "Tem certeza que irá excluir o útlimo produto?");
+
+                    if(opcao == 0){
+                    //excluir ultimo item!!!
+                      //Atributos de comando     
+                      String comando = "SELECT * FROM compra_itens ORDER BY ID DESC LIMIT 1";     
+
+                      try{
+                          Class.forName("com.mysql.jdbc.Driver");
+
+
+                          try (Connection conexao = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                              usuario, senha); //Conecta-se ao banco de dados
+                              Statement statement = conexao.createStatement()) {
+                              ResultSet resultSet = statement.executeQuery(comando);
+                              while (resultSet.next()) {
+                                  
+                                  id_Produto_ASerExluirdo = resultSet.getInt("id");
+                              }
+                                }
+                                    }//fim do try     //fim do try     
+                      catch(ClassNotFoundException | SQLException e){     
+
+                          System.err.println(e.getMessage());     
+                      }                
+
+
+                            try {
+            //Registra JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+ 
+            //Abrindo a conexão
+            Connection conn = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
+                                                                              usuario, senha); //Conecta-se ao banco de dados);
+ 
+            //Executa a query de exclusão
+            java.sql.Statement st = conn.createStatement();
+            st.executeUpdate("DELETE FROM compra_itens WHERE id = "+id_Produto_ASerExluirdo);
+            JOptionPane.showMessageDialog(rootPane, "Item excluído");
+            
+            //deleta na interface gráfica
+                           for( int i = tabela.getRowCount() -1; i >= 0; ++i)
+                              {
+                                  ((DefaultTableModel) tabela.getModel()).removeRow(i);
+                              }    
+        } catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(rootPane, e);
+        }//Fim try
+                    
+                    }
         } 
+        
         //Apertar f3 consulta item
         if(evt.getKeyCode() == KeyEvent.VK_F3){
             pesquisar_produto frame_ConsultarItem = new pesquisar_produto();
@@ -628,13 +703,9 @@ public class pdv extends javax.swing.JFrame {
         }
         //Apertar f4 ultimas vendas
         if(evt.getKeyCode() == KeyEvent.VK_F2){
-            excluir_item frame_exluirItem = new excluir_item();
-            frame_exluirItem.setVisible(true);
         }
         //Apertar f5 cancelar venda
         if(evt.getKeyCode() == KeyEvent.VK_F2){
-            excluir_item frame_exluirItem = new excluir_item();
-            frame_exluirItem.setVisible(true);
         }
     }
     
@@ -642,11 +713,7 @@ public class pdv extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+   
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -677,7 +744,7 @@ public class pdv extends javax.swing.JFrame {
         
         //Verificar se venda anterior foi fechada!!!!
                 //Atributos de comando     
-                String comando = "SELECT `finalizada` FROM compra ORDER BY id DESC LIMIT 1";     
+                String comando = "SELECT * FROM compra ORDER BY id DESC LIMIT 1";     
 
                 try{
                     Class.forName("com.mysql.jdbc.Driver");
@@ -691,14 +758,20 @@ public class pdv extends javax.swing.JFrame {
                         
                      
                         while (resultSet.next()) {
+                            
                            int eh_finalizada = resultSet.getInt("finalizada");
+                           Coidgo_ultimaVenda = resultSet.getInt("id");
                            
                            if (eh_finalizada == 1){
                                finalizada = true;
                            } else{
                                produto_field.setText("Venda Anterior não finalizada!!!");
                                produto_field.setForeground(Color.yellow);
-
+                               
+                               //abrir frame para finalizar a venda anterior
+                               finalizar_venda_anterior frame_finalizarAnterior = new finalizar_venda_anterior();
+                               frame_finalizarAnterior.setVisible(true);
+                               
                            }
                             
                         }
@@ -727,8 +800,6 @@ public class pdv extends javax.swing.JFrame {
                         Statement statement = conexao.createStatement()) {
                         
                         ResultSet resultSet = statement.executeQuery(sql);
-                        
-                     
                         while (resultSet.next()) {
                            id = resultSet.getInt("id");                           
                         }
@@ -749,6 +820,7 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
