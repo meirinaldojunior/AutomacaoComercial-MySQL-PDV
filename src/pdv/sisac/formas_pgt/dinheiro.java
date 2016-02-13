@@ -299,6 +299,8 @@ public class dinheiro extends javax.swing.JFrame {
             pdv.status_venda.setText("Status: Venda não Iniciada...!");
             pdv.id_venda_Labe.setText("");
             total_compra = 0;
+            while (pdv.tabela.getModel().getRowCount() > 0)
+                pdv.modelo.removeRow(0);
                        
             dispose();
             
