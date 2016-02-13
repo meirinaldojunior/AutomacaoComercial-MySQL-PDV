@@ -15,6 +15,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import javax.swing.JOptionPane;
 import javax.swing.text.html.parser.Parser;
 
@@ -27,6 +28,8 @@ public class pdv extends javax.swing.JFrame {
     /**
      * Creates new form pdv
      */
+    NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance();
+     
 
     String Produto;
     float preco_venda;
@@ -46,7 +49,7 @@ public class pdv extends javax.swing.JFrame {
     public pdv() {
         initComponents();
         
-        
+        produto_field.setEditable(false);
         //iniciando configurações salvas do banco
          String[] arquivo = new String[5];
 			try{			
@@ -72,7 +75,6 @@ public class pdv extends javax.swing.JFrame {
                         senha = arquivo[3];
                         base = arquivo[4];
                         
-        
         produto_field.requestFocus();
         produto_field.selectAll();
      
@@ -499,7 +501,7 @@ public class pdv extends javax.swing.JFrame {
                               total_compra = total_compra + (Integer.parseInt(quantidade_field.getText())*preco_venda);
                               //resetando preços e quantidades 
                               quantidade_field.setText("1");
-                              preco_total_vendaLabel.setText(total_compra+"");
+                              preco_total_vendaLabel.setText(formatoMoeda.format(total_compra));
                               
                   
               } catch (SQLException | ClassNotFoundException e) {
@@ -531,6 +533,10 @@ public class pdv extends javax.swing.JFrame {
 
                         venda_iniciada = true;
                         status_venda.setText("Venda Iniciada!");
+                        produto_field.setText("Venda Iniciada!");
+                        produto_field.requestFocus();
+                        produto_field.selectAll();
+                        produto_field.setEditable(true);
                         
 
                           try {
