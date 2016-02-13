@@ -5,6 +5,7 @@
  */
 package pdv.sisac;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class PDVSISAC {
 			}catch(IOException e){
                                base_de_dados frame_pdv = new base_de_dados();
                                frame_pdv.setVisible(true);
+                               
+                               
                         }
 
         //abrindo tela do PDV
