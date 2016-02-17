@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -44,12 +46,15 @@ public class pdv extends javax.swing.JFrame {
     public static String senha;
     public static String base;
     
+    public static String Caminho_logoLoja;
+    
     public static int total_itensQuanti;
     public static int id_venda_atual;
     public static Boolean venda_iniciada = false;
     public static float total_compra = 0;
                         
     public static int Coidgo_ultimaVenda;
+    int quantidade_ultimoPedido;
     
     static public JTable tabela;
     static public DefaultTableModel modelo =new DefaultTableModel();
@@ -57,7 +62,6 @@ public class pdv extends javax.swing.JFrame {
       private void criar_jtable(){
         
         tabela = new JTable(modelo);
-
         modelo.addColumn("Cod. Barras");
         modelo.addColumn("Produto");
         modelo.addColumn("Preço");
@@ -75,6 +79,9 @@ public class pdv extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         produto_field.setEditable(false);
+        
+
+
         
         criar_jtable();
         jScrollPane2.setViewportView(tabela);
@@ -103,6 +110,26 @@ public class pdv extends javax.swing.JFrame {
                         senha = arquivo[3];
                         base = arquivo[4];
                         
+           //pegando informações da loja
+        
+                        String[] loja_config = new String[3];
+			try{			
+                                FileReader entrada = new FileReader("conloja.sist");
+                                BufferedReader leitor = new BufferedReader(entrada);
+				int c = 0;
+				String linha = null;
+				while((linha = leitor.readLine()) != null)  {
+					loja_config[c] = leitor.readLine();
+					c++;					
+				}
+			}catch(IOException e){
+                         JOptionPane.showMessageDialog(this, "Configurações da loja não encontrada...");
+                        }
+                        nome_fantasiaLabel.setText(loja_config[1]);
+                        ImageIcon icon = new ImageIcon(loja_config[2]);
+                        LabelLogo.setIcon(icon);
+                    
+                        
         produto_field.requestFocus();
         produto_field.selectAll();
      
@@ -129,6 +156,8 @@ public class pdv extends javax.swing.JFrame {
         total_itensLabel = new javax.swing.JLabel();
         total_itens = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
+        LabelLogo = new javax.swing.JLabel();
+        nome_fantasiaLabel = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -263,15 +292,29 @@ public class pdv extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(1, 5, 119));
 
+        nome_fantasiaLabel.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        nome_fantasiaLabel.setForeground(new java.awt.Color(255, 241, 0));
+        nome_fantasiaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LabelLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nome_fantasiaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(LabelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(nome_fantasiaLabel)
+                .addContainerGap())
         );
 
         jPanel6.setBackground(new java.awt.Color(97, 97, 97));
@@ -524,10 +567,11 @@ public class pdv extends javax.swing.JFrame {
                   Connection conn = DriverManager.getConnection("jdbc:mysql://"+caminho+":"+porta+"/"+base, 
                                                                               usuario, senha); //Conecta-se ao banco de dados
                   java.sql.Statement st = conn.createStatement();
-                  st.executeUpdate("INSERT INTO compra_itens (id,id_pedido,id_produto,quantidade_itens) VALUES ("
+                  st.executeUpdate("INSERT INTO compra_itens (id,id_pedido,id_produto,preco,quantidade_itens) VALUES ("
                           + "0"+ ",'"
                           +  id_venda_atual + "','"
                           + Integer.parseInt(produto_field.getText().replaceAll(" ","")) + "','"                          
+                          + preco_venda + "','" 
                           + Integer.parseInt(quantidade_field.getText()) + "')");
                   
                   //Inclui na lista de vendas da tela
@@ -662,8 +706,11 @@ public class pdv extends javax.swing.JFrame {
                               while (resultSet.next()) {
                                   
                                   id_Produto_ASerExluirdo = resultSet.getInt("id");
+                                  quantidade_ultimoPedido = resultSet.getInt("quantidade_itens");
+                                  
                               }
                                 }
+                          total_itensQuanti = total_itensQuanti - quantidade_ultimoPedido;
                                     }//fim do try     //fim do try     
                       catch(ClassNotFoundException | SQLException e){     
 
@@ -702,7 +749,9 @@ public class pdv extends javax.swing.JFrame {
             frame_ConsultarItem.setVisible(true);
         }
         //Apertar f4 ultimas vendas
-        if(evt.getKeyCode() == KeyEvent.VK_F2){
+        if(evt.getKeyCode() == KeyEvent.VK_F4){
+            listar_ultimas_vendas frame_ultimasVendas = new listar_ultimas_vendas();
+            frame_ultimasVendas.setVisible(true);
         }
         //Apertar f5 cancelar venda
         if(evt.getKeyCode() == KeyEvent.VK_F2){
@@ -816,6 +865,7 @@ public class pdv extends javax.swing.JFrame {
    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LabelLogo;
     public static javax.swing.JLabel id_venda_Labe;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -838,6 +888,7 @@ public class pdv extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel nome_fantasiaLabel;
     public static javax.swing.JTextField precoItem_labe;
     public static javax.swing.JLabel preco_total_vendaLabel;
     public static javax.swing.JTextField produto_field;
